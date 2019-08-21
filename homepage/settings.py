@@ -150,4 +150,4 @@ class Production(Staging):
     """
     The in-production settings.
     """
-    pass
+    ALLOWED_HOSTS = ['127.0.0.1', 'mhomepage.herokuapp.com']
