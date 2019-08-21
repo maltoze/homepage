@@ -12,6 +12,8 @@ django = "*"
 whitenoise = "*"
 django-configurations = "*"
 gunicorn = "*"
+psycopg2-binary = "*"
+dj-database-url = "*"
 
 [requires]
 python_version = "3.7"
