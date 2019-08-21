@@ -1,0 +1,16 @@
+[[source]]
+url = "https://pypi.doubanio.com/simple"
+verify_ssl = true
+name = "douban"
+
+[dev-packages]
+flake8 = "*"
+yapf = "*"
+
+[packages]
+django = "*"
+whitenoise = "*"
+django-configurations = "*"
+
+[requires]
+python_version = "3.7"

@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% block title %} 旅行日志 {% endblock %}
+{% block css %}
+{% load static %}
+<link href="{% static "css/blog.css" %}" rel="stylesheet" />
+{% endblock %}
+{% block content %}
+<div class="nav-scroller py-1 mb-2">
+    <nav class="nav d-flex justify-content-center">
+        <a class="p-2 text-muted" href="/">首页</a>
+        <a class="p-2 text-muted" href="/resume/">个人简历</a>
+        <a class="p-2 text-muted" href="/travelog/">旅行日志</a>
+    </nav>
+</div>
+
+<main role="main" class="container" id="map-container">
+</main>
+{% endblock %}
+{% block js %}
+<script
+    src='https://webapi.amap.com/maps?v=1.4.15&key=034de7c3225fab439e8436e0cef42de4&plugin=AMap.DistrictLayer,AMap.DistrictSearch'></script>
+<script>
+    var provinceFill = 'rgb(20, 120, 230)';
+    var map = new AMap.Map('map-container', {
+        zooms: [3, 18],
+        center: [110, 30],
+        showIndoorMap: false,
+        zoom: 4,
+        isHotspot: false,
+        defaultCursor: 'pointer',
+        touchZoomCenter: 1,
+        pitch: 0,
+        layers: [
+            // new AMap.TileLayer(),
+            // disWorld,
+            // disCountry
+        ],
+        viewMode: '2D',
+        resizeEnable: true
+    });
+
+    //关闭信息窗体
+    function closeInfoWindow() {
+        map.clearInfoWindow();
+    }
+
+    //行政区划查询
+    var opts = {
+        level: 'province',
+        subdistrict: 0,
+        extensions: 'all'
+    };
+    district = new AMap.DistrictSearch(opts);//注意：需要使用插件同步下发功能才能这样直接使用
+
+    function addMarker(pName, infoWindow) {
+        district.search(pName, function (status, result) {
+            if (status == 'complete') {
+                var dObj = result.districtList[0];
+                var marker = new AMap.Marker({
+                    position: new AMap.LngLat(dObj.center.lng, dObj.center.lat),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+                    offset: new AMap.Pixel(-12, -12),
+                    zIndex: 101,
+                    title: dObj.name,
+                });
+                // 将创建的点标记添加到已有的地图实例：
+                map.add(marker);
+                AMap.event.addListener(marker, 'mouseover', function () {
+                    infoWindow.open(map, marker.getPosition());
+                });
+                AMap.event.addListener(marker, 'mouseout', function () {
+                    closeInfoWindow();
+                });
+            }
+        });
+    }
+
+    function drawBounds(adcode, infoWindow) {
+        //行政区查询
+        district.search(adcode, function (status, result) {
+            var polygons = [];
+            var bounds = result.districtList[0].boundaries;
+            if (bounds) {
+                for (var i = 0, l = bounds.length; i < l; i++) {
+                    //生成行政区划polygon
+                    var polygon = new AMap.Polygon({
+                        strokeWeight: 1,
+                        path: bounds[i],
+                        fillOpacity: 0.4,
+                        fillColor: '#80d8ff',
+                        strokeColor: '#0091ea'
+                    });
+                    polygons.push(polygon);
+                    // 显示日期和备注信息
+                    polygon.on('mouseover', function (e) {
+                        infoWindow.open(map, [e.lnglat.lng, e.lnglat.lat]);
+                    });
+                    polygon.on('mouseout', function (e) {
+                        closeInfoWindow();
+                    });
+                }
+            }
+            map.add(polygons)
+            // map.setFitView(polygons);//视口自适应
+        });
+    }
+
+    function createInfoWindow(title, content) {
+        var info = [];
+        info.push(title);
+        info.push(content);
+        var infoWindow = new AMap.InfoWindow({
+            content: info.join(" ")
+        });
+        return infoWindow;
+    }
+
+    // var tlog = [{ traveled: true, province: '130000' }, { traveled: true, province: '140000' }, {traveled: false, plan_time: '2019', province: '540000'}];
+    var tlog = {{ tList|safe }};
+    for (let tl of tlog) {
+        tl = tl.fields;
+        if (!tl.traveled && tl.plan_time) {
+            const infoWindow = createInfoWindow(tl.plan_time, tl.remark);
+            addMarker(tl.province, infoWindow);
+        } else if (tl.traveled) {
+            const infoWindow = createInfoWindow(tl.travel_time, tl.remark);
+            drawBounds(tl.province, infoWindow)
+        }
+    }
+</script>
+{% endblock %}
