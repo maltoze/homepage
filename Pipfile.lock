@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "c01a0e87204cdcee1275410998e30dc76e97b38f9f89fd6afd0871928c218c64"
+            "sha256": "6d671abd3e7a7dcc2c028faecf860a7bb88132ebe4357726ab49a651ca841caf"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,6 +31,14 @@
             ],
             "index": "douban",
             "version": "==2.1"
+        },
+        "gunicorn": {
+            "hashes": [
+                "sha256:aa8e0b40b4157b36a5df5e599f45c9c76d6af43845ba3b3b0efe2c70473c2471",
+                "sha256:fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3"
+            ],
+            "index": "douban",
+            "version": "==19.9.0"
         },
         "pytz": {
             "hashes": [
