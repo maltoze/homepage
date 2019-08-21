@@ -9,8 +9,14 @@ https://docs.djangoproject.com/en/2.2/howto/deployment/wsgi/
 
 import os
 
-from django.core.wsgi import get_wsgi_application
+# from django.core.wsgi import get_wsgi_application
 
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'homepage.settings')
+
+configuration = os.getenv('ENVIRONMENT', 'development').title()
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'homepage.settings')
+os.environ.setdefault('DJANGO_CONFIGURATION', configuration)
+
+from configurations.wsgi import get_wsgi_application    # NOQA
 
 application = get_wsgi_application()
