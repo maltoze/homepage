@@ -1,4 +1,13 @@
 # Homepage
+## 安装
+```bash
+# 初始化虚拟环境(Python3)
+pipenv --three
+pipenv shell
+# 安装依赖
+pipenv sync
+python manage.py migrate
+```
 ## 部署
 ### Heroku
 ``` bash

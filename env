@@ -1,4 +1,0 @@
-ENVIRONMENT='DEVELOPMENT'
-DJANGO_SECRET_KEY='6&xb)_8!b^$^#p&p++&-9co=gw1j^b5%e7js!h#!!i+(ekxtyx'
-DJANGO_DEBUG='yes'
-DJANGO_TEMPLATE_DEBUG='yes'
