@@ -1,14 +1,14 @@
 # Homepage
-## 安装
+## Installation
 ```bash
-# 初始化虚拟环境(Python3)
-pipenv --three
-pipenv shell
-# 安装依赖
-pipenv sync
-python manage.py migrate
+$ git clone git@github.com:maltoze/homepage.git
+$ cd homepage
+$ pipenv install --dev
+$ pipenv shell
+$ python manage.py migrate
+$ python manage.py runserver
 ```
-## 部署
+## Deployment
 ### Heroku
 ``` bash
 $ heroku login
